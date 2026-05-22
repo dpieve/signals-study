@@ -84,8 +84,9 @@ TEST(SignalMetrics, NoiseLevelConstantSignal) {
 }
 
 TEST(SignalMetrics, NoiseLevelAlternating) {
-    // [1, -1, 1, -1] → diffs = [-2, 2, -2] → mean=0, var = (4+4+4)/3 = 4 → std=2
-    const std::vector<double> samples = {1.0, -1.0, 1.0, -1.0};
+    // [1,-1,1,-1,1] → diffs = [-2,2,-2,2] → mean=0, var=(4+4+4+4)/4=4 → std=2
+    // Using 5 samples so the 4 differences sum to zero and mean=0.
+    const std::vector<double> samples = {1.0, -1.0, 1.0, -1.0, 1.0};
     EXPECT_NEAR(noise_level(std::span<const double>(samples)), 2.0, 1e-10);
 }
 

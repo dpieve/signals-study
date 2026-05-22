@@ -42,18 +42,21 @@ TEST(ChannelRingBuffer, WrapAroundOverwritesOldestSample) {
     const auto view = buf.get_view();
     ASSERT_EQ(static_cast<int>(view.size()), BUF);
 
-    // The first 10 values visible should be the overwritten ones: 9000..9009
-    for (int i = 0; i < 10; ++i) {
+    // get_view() returns oldest-first, newest-last.
+    // After BUF+10 pushes, the oldest sample is 10 (index 0 in view),
+    // and the newest is 9009 (index BUF-1 in view).
+    // Slots 0..BUF-11 in view hold the old values 10..BUF-1.
+    for (int i = 0; i < BUF - 10; ++i) {
         EXPECT_DOUBLE_EQ(view[static_cast<size_t>(i)],
-                         9000.0 + static_cast<double>(i))
+                         static_cast<double>(10 + i))
             << "Mismatch at view[" << i << "]";
     }
 
-    // The next BUF-10 values should be 10..BUF-1
-    for (int i = 0; i < BUF - 10; ++i) {
-        EXPECT_DOUBLE_EQ(view[static_cast<size_t>(10 + i)],
-                         static_cast<double>(10 + i))
-            << "Mismatch at view[" << (10 + i) << "]";
+    // Last 10 slots hold the newest pushes: 9000..9009.
+    for (int i = 0; i < 10; ++i) {
+        EXPECT_DOUBLE_EQ(view[static_cast<size_t>(BUF - 10 + i)],
+                         9000.0 + static_cast<double>(i))
+            << "Mismatch at view[" << (BUF - 10 + i) << "]";
     }
 }
 

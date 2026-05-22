@@ -43,4 +43,4 @@ target_link_libraries(generator_tests PRIVATE
 target_compile_options(generator_tests PRIVATE -Wall -Wextra)
 
 include(GoogleTest)
-gtest_discover_tests(generator_tests)
+gtest_discover_tests(generator_tests DISCOVERY_MODE PRE_TEST)

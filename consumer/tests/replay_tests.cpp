@@ -49,6 +49,10 @@ read_all_rows(sqlite3* db) {
 
 TEST(ReplayTests, RowsReturnedInTimestampOrder) {
     const std::string tmp_db = "test_replay_order.db";
+    // Delete stale files from previous runs before writing.
+    std::remove(tmp_db.c_str());
+    std::remove((tmp_db + "-wal").c_str());
+    std::remove((tmp_db + "-shm").c_str());
 
     // Write deliberately out-of-order timestamps.
     {
@@ -93,6 +97,9 @@ TEST(ReplayTests, RowsReturnedInTimestampOrder) {
 
 TEST(ReplayTests, RowsFilteredByTimeRange) {
     const std::string tmp_db = "test_replay_filter.db";
+    std::remove(tmp_db.c_str());
+    std::remove((tmp_db + "-wal").c_str());
+    std::remove((tmp_db + "-shm").c_str());
 
     {
         PersistenceConfig cfg;

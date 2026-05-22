@@ -31,7 +31,7 @@ bool GrpcBroadcaster::broadcast(const CommittedBatch& batch) noexcept {
 
     for (std::size_t pi = 0; pi < batch.packets.size(); ++pi) {
         const auto& pkt = batch.packets[pi];
-        auto* proto_pkt = google::protobuf::Arena::CreateMessage<telemetry::Packet>(
+        auto* proto_pkt = google::protobuf::Arena::Create<telemetry::Packet>(
             &arenas[pi]);
 
         // Detect sequence-level gap.

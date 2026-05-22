@@ -108,7 +108,7 @@ grpc::Status TelemetryServiceImpl::FetchHistorical(
     // Stream rows in batches of up to 512 samples per Packet.
     static constexpr int kBatchSize = 512;
     google::protobuf::Arena arena;
-    auto* pkt = google::protobuf::Arena::CreateMessage<telemetry::Packet>(&arena);
+    auto* pkt = google::protobuf::Arena::Create<telemetry::Packet>(&arena);
     uint64_t seq = 0;
 
     int rc;
@@ -127,7 +127,7 @@ grpc::Status TelemetryServiceImpl::FetchHistorical(
             if (!writer->Write(*pkt)) { break; }
             // Reset the packet for the next batch using the arena.
             arena.Reset();
-            pkt = google::protobuf::Arena::CreateMessage<telemetry::Packet>(&arena);
+            pkt = google::protobuf::Arena::Create<telemetry::Packet>(&arena);
         }
     }
     sqlite3_finalize(stmt);

@@ -1,103 +1,133 @@
 {
   "version": "0.2.0",
+
+  // Start both processes at once.  Consumer must be reachable before waveforms
+  // appear; the client retries automatically so ordering is not critical.
+  "compounds": [
+    {
+      "name": "Full System",
+      "configurations": ["Consumer", "ICU Monitor"],
+      "stopAll": true
+    }
+  ],
+
   "configurations": [
+
+    // ── ICU Monitor (client UI) ─────────────────────────────────────────────
     {
-      "name": "Debug: Consumer",
+      "name": "ICU Monitor",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build-debug/consumer/consumer.exe",
-      "args": [],
-      "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
-      "environment": [],
-      "externalConsole": false,
-      "MIMode": "gdb",
-      "miDebuggerPath": "C:\\msys64\\ucrt64\\bin\\gdb.exe",
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        },
-        {
-          "description": "Set disassembly flavor to Intel",
-          "text": "-gdb-set disassembly-flavor intel",
-          "ignoreFailures": true
-        }
-      ],
-      "preLaunchTask": "Build: Consumer only (Debug)"
-    },
-    {
-      "name": "Debug: Client (ICU Monitor)",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/build-debug/client/icu_monitor.exe",
+      "program": "${workspaceFolder}/build-debug/client/icu_monitor",
+      "windows": {
+        "program": "${workspaceFolder}/build-debug/client/icu_monitor.exe",
+        "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
+        "environment": [
+          { "name": "PATH", "value": "C:/msys64/ucrt64/bin;${env:PATH}" }
+        ]
+      },
       "args": ["--server", "localhost:50051"],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
-      "environment": [],
-      "externalConsole": false,
       "MIMode": "gdb",
-      "miDebuggerPath": "C:\\msys64\\ucrt64\\bin\\gdb.exe",
+      "miDebuggerPath": "gdb",
       "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }
+        { "text": "-enable-pretty-printing", "ignoreFailures": true },
+        { "text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true }
       ],
-      "preLaunchTask": "Build: Client only (Debug)"
+      "preLaunchTask": "cmake: build icu_monitor"
     },
+
+    // ── Consumer (backend) ──────────────────────────────────────────────────
     {
-      "name": "Debug: Generator Tests",
+      "name": "Consumer",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build-debug/generator/generator_tests.exe",
-      "args": ["--gtest_color=yes"],
+      "program": "${workspaceFolder}/build-debug/consumer/consumer",
+      "windows": {
+        "program": "${workspaceFolder}/build-debug/consumer/consumer.exe",
+        "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
+        "environment": [
+          { "name": "PATH", "value": "C:/msys64/ucrt64/bin;${env:PATH}" }
+        ]
+      },
+      "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
-      "environment": [],
-      "externalConsole": false,
       "MIMode": "gdb",
-      "miDebuggerPath": "C:\\msys64\\ucrt64\\bin\\gdb.exe",
+      "miDebuggerPath": "gdb",
       "setupCommands": [
         { "text": "-enable-pretty-printing", "ignoreFailures": true }
       ],
-      "preLaunchTask": "Build: All (Debug)"
+      "preLaunchTask": "cmake: build consumer"
     },
+
+    // ── Tests ───────────────────────────────────────────────────────────────
     {
-      "name": "Debug: Consumer Tests",
+      "name": "Generator Tests",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build-debug/consumer/consumer_tests.exe",
+      "program": "${workspaceFolder}/build-debug/generator/generator_tests",
+      "windows": {
+        "program": "${workspaceFolder}/build-debug/generator/generator_tests.exe",
+        "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
+        "environment": [
+          { "name": "PATH", "value": "C:/msys64/ucrt64/bin;${env:PATH}" }
+        ]
+      },
       "args": ["--gtest_color=yes"],
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
-      "environment": [],
-      "externalConsole": false,
+      "cwd": "${workspaceFolder}/build-debug/generator",
       "MIMode": "gdb",
-      "miDebuggerPath": "C:\\msys64\\ucrt64\\bin\\gdb.exe",
+      "miDebuggerPath": "gdb",
       "setupCommands": [
         { "text": "-enable-pretty-printing", "ignoreFailures": true }
       ],
-      "preLaunchTask": "Build: All (Debug)"
+      "preLaunchTask": "cmake: build generator_tests"
     },
     {
-      "name": "Debug: Client Tests",
+      "name": "Consumer Tests",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build-debug/client/client_tests.exe",
+      "program": "${workspaceFolder}/build-debug/consumer/consumer_tests",
+      "windows": {
+        "program": "${workspaceFolder}/build-debug/consumer/consumer_tests.exe",
+        "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
+        "environment": [
+          { "name": "PATH", "value": "C:/msys64/ucrt64/bin;${env:PATH}" }
+        ]
+      },
       "args": ["--gtest_color=yes"],
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
-      "environment": [],
-      "externalConsole": false,
+      "cwd": "${workspaceFolder}/build-debug/consumer",
       "MIMode": "gdb",
-      "miDebuggerPath": "C:\\msys64\\ucrt64\\bin\\gdb.exe",
+      "miDebuggerPath": "gdb",
       "setupCommands": [
         { "text": "-enable-pretty-printing", "ignoreFailures": true }
       ],
-      "preLaunchTask": "Build: All (Debug)"
+      "preLaunchTask": "cmake: build consumer_tests"
+    },
+    {
+      "name": "Client Tests",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build-debug/client/client_tests",
+      "windows": {
+        "program": "${workspaceFolder}/build-debug/client/client_tests.exe",
+        "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
+        "environment": [
+          { "name": "PATH", "value": "C:/msys64/ucrt64/bin;${env:PATH}" }
+        ]
+      },
+      "args": ["--gtest_color=yes"],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}/build-debug/client",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        { "text": "-enable-pretty-printing", "ignoreFailures": true }
+      ],
+      "preLaunchTask": "cmake: build client_tests"
     }
   ]
 }

@@ -60,7 +60,7 @@ TEST(PacketQueue, DropCountIncrements) {
     PacketQueue q(4);
 
     for (int i = 0; i < 10; ++i) {
-        q.enqueue(make_packet(static_cast<uint64_t>(i)));
+        (void)q.enqueue(make_packet(static_cast<uint64_t>(i)));
     }
 
     EXPECT_EQ(q.drop_count.load(), 6u);

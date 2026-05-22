@@ -7,9 +7,6 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build-${presetName}",
       "cacheVariables": {
-        "CMAKE_C_COMPILER":   "C:/msys64/ucrt64/bin/gcc.exe",
-        "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe",
-        "CMAKE_MAKE_PROGRAM": "C:/msys64/ucrt64/bin/ninja.exe",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       }
     },
@@ -17,69 +14,45 @@
       "name": "debug",
       "displayName": "Debug",
       "inherits": "base",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
-      }
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
     },
     {
       "name": "release",
       "displayName": "Release",
       "inherits": "base",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
-      }
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
     },
     {
       "name": "tsan",
       "displayName": "ThreadSanitizer",
       "inherits": "base",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "ENABLE_TSAN": "ON"
-      }
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug", "ENABLE_TSAN": "ON" }
     },
     {
       "name": "asan",
       "displayName": "AddressSanitizer + UBSan",
       "inherits": "base",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "ENABLE_ASAN": "ON"
-      }
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug", "ENABLE_ASAN": "ON" }
     }
   ],
   "buildPresets": [
-    {
-      "name": "debug",
-      "configurePreset": "debug",
-      "jobs": 8
-    },
-    {
-      "name": "release",
-      "configurePreset": "release",
-      "jobs": 8
-    },
-    {
-      "name": "tsan",
-      "configurePreset": "tsan",
-      "jobs": 8
-    },
-    {
-      "name": "asan",
-      "configurePreset": "asan",
-      "jobs": 8
-    }
+    { "name": "debug",   "configurePreset": "debug",   "jobs": 8 },
+    { "name": "release", "configurePreset": "release",  "jobs": 8 },
+    { "name": "tsan",    "configurePreset": "tsan",     "jobs": 8 },
+    { "name": "asan",    "configurePreset": "asan",     "jobs": 8 }
   ],
   "testPresets": [
     {
       "name": "debug",
       "configurePreset": "debug",
-      "output": { "outputOnFailure": true }
+      "output": { "outputOnFailure": true },
+      "environment": { "PATH": "C:/msys64/ucrt64/bin;$penv{PATH}" }
     },
     {
       "name": "tsan",
       "configurePreset": "tsan",
-      "output": { "outputOnFailure": true }
+      "output": { "outputOnFailure": true },
+      "environment": { "PATH": "C:/msys64/ucrt64/bin;$penv{PATH}" }
     }
   ]
 }

@@ -145,7 +145,9 @@ void App::processing_loop(std::stop_token st) {
                       result->size(), batch.commit_sequence);
 
         // Broadcast the raw committed packets to gRPC subscribers.
-        broadcaster_.broadcast(batch);
+        // Return value indicates whether any subscriber received data;
+        // we don't act on it here — metrics are tracked inside broadcast().
+        (void)broadcaster_.broadcast(batch);
     }
 
     spdlog::info("processing_loop: exiting");

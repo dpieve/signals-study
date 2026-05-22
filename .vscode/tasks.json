@@ -1,199 +1,68 @@
 {
   "version": "2.0.0",
   "tasks": [
-    // -----------------------------------------------------------------------
-    // Configure tasks
-    // -----------------------------------------------------------------------
+    // ── Build helpers (called by launch preLaunchTask) ──────────────────────
     {
-      "label": "CMake: Configure (Debug)",
+      "label": "cmake: build all",
       "type": "shell",
-      "command": "cmake",
-      "args": [
-        "-S", "${workspaceFolder}",
-        "-B", "${workspaceFolder}/build-debug",
-        "-G", "Ninja",
-        "-DCMAKE_MAKE_PROGRAM=C:/msys64/ucrt64/bin/ninja.exe",
-        "-DCMAKE_BUILD_TYPE=Debug",
-        "-DCMAKE_C_COMPILER=gcc",
-        "-DCMAKE_CXX_COMPILER=g++",
-        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
-      ],
-      "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
-      "problemMatcher": "$gcc",
-      "detail": "Configure CMake Debug build"
-    },
-    {
-      "label": "CMake: Configure (Release)",
-      "type": "shell",
-      "command": "cmake",
-      "args": [
-        "-S", "${workspaceFolder}",
-        "-B", "${workspaceFolder}/build-release",
-        "-G", "Ninja",
-        "-DCMAKE_MAKE_PROGRAM=C:/msys64/ucrt64/bin/ninja.exe",
-        "-DCMAKE_BUILD_TYPE=Release",
-        "-DCMAKE_C_COMPILER=gcc",
-        "-DCMAKE_CXX_COMPILER=g++",
-        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
-      ],
-      "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
-      "problemMatcher": "$gcc",
-      "detail": "Configure CMake Release build"
-    },
-    {
-      "label": "CMake: Configure (TSan)",
-      "type": "shell",
-      "command": "cmake",
-      "args": [
-        "-S", "${workspaceFolder}",
-        "-B", "${workspaceFolder}/build-tsan",
-        "-G", "Ninja",
-        "-DCMAKE_MAKE_PROGRAM=C:/msys64/ucrt64/bin/ninja.exe",
-        "-DCMAKE_BUILD_TYPE=Debug",
-        "-DCMAKE_C_COMPILER=gcc",
-        "-DCMAKE_CXX_COMPILER=g++",
-        "-DENABLE_TSAN=ON"
-      ],
-      "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
-      "problemMatcher": "$gcc",
-      "detail": "Configure CMake ThreadSanitizer build"
-    },
-    // -----------------------------------------------------------------------
-    // Build tasks
-    // -----------------------------------------------------------------------
-    {
-      "label": "Build: All (Debug)",
-      "type": "shell",
-      "command": "cmake",
-      "args": ["--build", "${workspaceFolder}/build-debug", "--parallel", "8"],
+      "command": "cmake --build \"${workspaceFolder}/build-debug\" --parallel 8",
       "group": { "kind": "build", "isDefault": true },
-      "dependsOn": "CMake: Configure (Debug)",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
       "problemMatcher": "$gcc",
-      "detail": "Build all targets (Debug)"
+      "presentation": { "reveal": "silent", "panel": "shared", "clear": true }
     },
     {
-      "label": "Build: All (Release)",
+      "label": "cmake: build consumer",
       "type": "shell",
-      "command": "cmake",
-      "args": ["--build", "${workspaceFolder}/build-release", "--parallel", "8"],
+      "command": "cmake --build \"${workspaceFolder}/build-debug\" --target consumer --parallel 8",
       "group": "build",
-      "dependsOn": "CMake: Configure (Release)",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
       "problemMatcher": "$gcc",
-      "detail": "Build all targets (Release)"
+      "presentation": { "reveal": "silent", "panel": "shared", "clear": true }
     },
     {
-      "label": "Build: Consumer only (Debug)",
+      "label": "cmake: build icu_monitor",
       "type": "shell",
-      "command": "cmake",
-      "args": ["--build", "${workspaceFolder}/build-debug", "--target", "consumer", "--parallel", "8"],
+      "command": "cmake --build \"${workspaceFolder}/build-debug\" --target icu_monitor --parallel 8",
       "group": "build",
-      "dependsOn": "CMake: Configure (Debug)",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
-      "problemMatcher": "$gcc"
+      "problemMatcher": "$gcc",
+      "presentation": { "reveal": "silent", "panel": "shared", "clear": true }
     },
     {
-      "label": "Build: Client only (Debug)",
+      "label": "cmake: build generator_tests",
       "type": "shell",
-      "command": "cmake",
-      "args": ["--build", "${workspaceFolder}/build-debug", "--target", "icu_monitor", "--parallel", "8"],
+      "command": "cmake --build \"${workspaceFolder}/build-debug\" --target generator_tests --parallel 8",
       "group": "build",
-      "dependsOn": "CMake: Configure (Debug)",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
-      "problemMatcher": "$gcc"
-    },
-    // -----------------------------------------------------------------------
-    // Run tasks
-    // -----------------------------------------------------------------------
-    {
-      "label": "Run: Consumer",
-      "type": "shell",
-      "command": "${workspaceFolder}/build-debug/consumer/consumer.exe",
-      "args": [],
-      "group": "test",
-      "dependsOn": "Build: All (Debug)",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
-      "detail": "Start the consumer (telemetry backend)"
+      "problemMatcher": "$gcc",
+      "presentation": { "reveal": "silent", "panel": "shared", "clear": true }
     },
     {
-      "label": "Run: Client (ICU Monitor UI)",
+      "label": "cmake: build consumer_tests",
       "type": "shell",
-      "command": "${workspaceFolder}/build-debug/client/icu_monitor.exe",
-      "args": ["--server", "localhost:50051"],
-      "group": "test",
-      "dependsOn": "Build: All (Debug)",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
-      "detail": "Start the ICU monitor client UI"
+      "command": "cmake --build \"${workspaceFolder}/build-debug\" --target consumer_tests --parallel 8",
+      "group": "build",
+      "problemMatcher": "$gcc",
+      "presentation": { "reveal": "silent", "panel": "shared", "clear": true }
     },
-    // -----------------------------------------------------------------------
-    // Test tasks
-    // -----------------------------------------------------------------------
     {
-      "label": "Test: All",
+      "label": "cmake: build client_tests",
       "type": "shell",
-      "command": "ctest",
-      "args": ["--output-on-failure", "--parallel", "4"],
-      "options": { "cwd": "${workspaceFolder}/build-debug" },
+      "command": "cmake --build \"${workspaceFolder}/build-debug\" --target client_tests --parallel 8",
+      "group": "build",
+      "problemMatcher": "$gcc",
+      "presentation": { "reveal": "silent", "panel": "shared", "clear": true }
+    },
+
+    // ── Tests ───────────────────────────────────────────────────────────────
+    {
+      "label": "Run All Tests",
+      "type": "shell",
+      "command": "ctest --preset debug --output-on-failure",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": { "PATH": "C:/msys64/ucrt64/bin;${env:PATH}" }
+      },
       "group": { "kind": "test", "isDefault": true },
-      "dependsOn": "Build: All (Debug)",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
-      "problemMatcher": "$gcc",
-      "detail": "Run all CTest tests"
-    },
-    {
-      "label": "Test: Generator",
-      "type": "shell",
-      "command": "${workspaceFolder}/build-debug/generator/generator_tests.exe",
-      "args": ["--gtest_color=yes"],
-      "group": "test",
-      "dependsOn": "Build: All (Debug)",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
-      "detail": "Run generator unit tests"
-    },
-    {
-      "label": "Test: Consumer",
-      "type": "shell",
-      "command": "${workspaceFolder}/build-debug/consumer/consumer_tests.exe",
-      "args": ["--gtest_color=yes"],
-      "group": "test",
-      "dependsOn": "Build: All (Debug)",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
-      "detail": "Run consumer unit tests"
-    },
-    {
-      "label": "Test: Client",
-      "type": "shell",
-      "command": "${workspaceFolder}/build-debug/client/client_tests.exe",
-      "args": ["--gtest_color=yes"],
-      "group": "test",
-      "dependsOn": "Build: All (Debug)",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
-      "detail": "Run client unit tests"
-    },
-    {
-      "label": "Test: All with TSan",
-      "type": "shell",
-      "command": "ctest",
-      "args": ["--output-on-failure"],
-      "options": { "cwd": "${workspaceFolder}/build-tsan" },
-      "group": "test",
-      "dependsOn": "Build: All (TSan)",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
-      "detail": "Run all tests under ThreadSanitizer"
-    },
-    {
-      "label": "Build: All (TSan)",
-      "type": "shell",
-      "command": "cmake",
-      "args": ["--build", "${workspaceFolder}/build-tsan", "--parallel", "8"],
-      "group": "build",
-      "dependsOn": "CMake: Configure (TSan)",
-      "presentation": { "reveal": "always", "panel": "dedicated" },
-      "problemMatcher": "$gcc"
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true }
     }
   ]
 }
