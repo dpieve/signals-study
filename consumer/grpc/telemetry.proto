@@ -1,0 +1,30 @@
+syntax = "proto3";
+package telemetry;
+
+message Sample {
+    uint64 timestamp_ns = 1;
+    uint32 channel_id   = 2;
+    double value        = 3;
+}
+
+message Packet {
+    uint64          sequence = 1;
+    repeated Sample samples  = 2;
+    bool            has_gap  = 3;
+}
+
+message SubscribeRequest {
+    repeated uint32 channels = 1;
+}
+
+message HistoricalRequest {
+    uint64          start_ns        = 1;
+    uint64          end_ns          = 2;
+    repeated uint32 channels        = 3;
+    uint64          max_duration_ns = 4;
+}
+
+service TelemetryService {
+    rpc SubscribeLive(SubscribeRequest)     returns (stream Packet);
+    rpc FetchHistorical(HistoricalRequest)  returns (stream Packet);
+}

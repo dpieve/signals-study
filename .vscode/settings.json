@@ -1,0 +1,32 @@
+{
+  "cmake.buildDirectory": "${workspaceFolder}/build-debug",
+  "cmake.configureArgs": [
+    "-DCMAKE_C_COMPILER=C:/msys64/ucrt64/bin/gcc.exe",
+    "-DCMAKE_CXX_COMPILER=C:/msys64/ucrt64/bin/g++.exe"
+  ],
+  "cmake.generator": "Ninja",
+  "cmake.buildBeforeRun": true,
+  "files.associations": {
+    "*.h": "c",
+    "*.hpp": "cpp",
+    "*.cpp": "cpp",
+    "*.c": "c",
+    "*.proto": "proto3"
+  },
+  "editor.formatOnSave": false,
+  "C_Cpp.default.compilerPath": "C:/msys64/ucrt64/bin/g++.exe",
+  "C_Cpp.default.cppStandard": "c++23",
+  "C_Cpp.default.cStandard": "c11",
+  "C_Cpp.default.intelliSenseMode": "gcc-x64",
+  "terminal.integrated.defaultProfile.windows": "MSYS2 UCRT64",
+  "terminal.integrated.profiles.windows": {
+    "MSYS2 UCRT64": {
+      "path": "C:/msys64/ucrt64.exe",
+      "args": []
+    },
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    }
+  }
+}

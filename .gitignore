@@ -1,0 +1,14 @@
+build/
+build-debug/
+build-release/
+build-tsan/
+build-asan/
+*.db
+*.db-wal
+*.db-shm
+compile_commands.json
+.cache/
+CMakeUserPresets.json
+*.user
+.vs/
+out/
