@@ -51,6 +51,16 @@
       "presentation": { "reveal": "silent", "panel": "shared", "clear": true }
     },
 
+    // ── Release build (configure + build in one step) ──────────────────────
+    {
+      "label": "cmake: build all (release)",
+      "type": "shell",
+      "command": "cmake --preset release; cmake --build --preset release --parallel 8",
+      "group": "build",
+      "problemMatcher": "$gcc",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true }
+    },
+
     // ── Tests ───────────────────────────────────────────────────────────────
     {
       "label": "Run All Tests",

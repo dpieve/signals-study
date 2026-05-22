@@ -1,12 +1,15 @@
 {
   "version": "0.2.0",
 
-  // Start both processes at once.  Consumer must be reachable before waveforms
-  // appear; the client retries automatically so ordering is not critical.
   "compounds": [
     {
       "name": "Full System",
       "configurations": ["Consumer", "ICU Monitor"],
+      "stopAll": true
+    },
+    {
+      "name": "Full System (Release)",
+      "configurations": ["Consumer (Release)", "ICU Monitor (Release)"],
       "stopAll": true
     }
   ],
@@ -128,6 +131,46 @@
         { "text": "-enable-pretty-printing", "ignoreFailures": true }
       ],
       "preLaunchTask": "cmake: build client_tests"
+    },
+
+    // ── Release (no debugger overhead, LTO-optimised binaries) ─────────────
+    {
+      "name": "Consumer (Release)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build-release/consumer/consumer",
+      "windows": {
+        "program": "${workspaceFolder}/build-release/consumer/consumer.exe",
+        "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
+        "environment": [
+          { "name": "PATH", "value": "C:/msys64/ucrt64/bin;${env:PATH}" }
+        ]
+      },
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "preLaunchTask": "cmake: build all (release)"
+    },
+    {
+      "name": "ICU Monitor (Release)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build-release/client/icu_monitor",
+      "windows": {
+        "program": "${workspaceFolder}/build-release/client/icu_monitor.exe",
+        "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
+        "environment": [
+          { "name": "PATH", "value": "C:/msys64/ucrt64/bin;${env:PATH}" }
+        ]
+      },
+      "args": ["--server", "localhost:50051"],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "preLaunchTask": "cmake: build all (release)"
     }
   ]
 }
